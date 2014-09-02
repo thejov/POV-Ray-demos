@@ -36,41 +36,35 @@ union {
         sphere {
             <7.5, 30, 0> 7.5
             scale <1,2,1>
-            translate -35*y    
+            translate -33*y
         }
-        box { <0, 30, 0>, <30, 50, 0.00015> }
+        box { <0, 30, 0>, <30, 50, 0.00000015> }
     }
     
-    box { 0, <15, 30, 0.01> }        
+    box { 0, <15, 30, 0> }        
     
+    pigment {
+        checker
+            color Cyan
+            color Blue
+    }                  
     texture { NBoldglass }
-    pigment { Blue }   
-    
-    normal {
-        pigment_pattern{
-            crackle              
-            scale 0.6
-        }
-        2
-     }
-     finish { ambient 0.05 diffuse 0.95 phong 1 }       
-    
 }
 
-
 // cross
-merge {    
-    box { <6, 5, 0>, <9, 40, 0.02> }
-    box { <2, 22, 0>, <13, 25, 0.02> }    
-    
+union {    
+    box { <6, 5, 0>, <9, 30, -0.0002> }
+    box { <2, 22, 0>, <13, 25, -0.0002> }    
+    translate -0.0015*z
     pigment { Brown }
-    
-    normal {
-        pigment_pattern{
-            crackle              
-            scale 0.6
-        }
-        2
-     }
-     finish { ambient 0.05 diffuse 0.95 phong 1 }
+    texture { NBoldglass }
+}
+
+// hover behind cross
+intersection {
+    sphere { <7.5, 23.5, 0> 7.5 }
+    box { <0, 15, 0>, <30, 50, 0.00015> }
+    pigment { Yellow }
+    texture { NBoldglass }
+    translate -0.001*z
 }
