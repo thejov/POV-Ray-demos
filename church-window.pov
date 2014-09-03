@@ -2,6 +2,7 @@
 #include "glass.inc"
 #include "textures.inc"
 #include "stones1.inc"
+#include "transforms.inc"
 
 camera {
 	location <25, 30, -55>
@@ -43,11 +44,7 @@ union {
     
     box { 0, <15, 30, 0> }        
     
-    pigment {
-        checker
-            color Cyan
-            color Blue
-    }                  
+    pigment { Blue }
     texture { NBoldglass }
 }
 
@@ -60,11 +57,29 @@ union {
     texture { NBoldglass }
 }
 
-// hover behind cross
+// light circle behind cross
 intersection {
     sphere { <7.5, 23.5, 0> 7.5 }
     box { <0, 15, 0>, <30, 50, 0.00015> }
     pigment { Yellow }
     texture { NBoldglass }
     translate -0.001*z
+}
+
+// shine lines
+#declare Line = box {
+	<7.5, 23.5, 0>, <8, 40, -0.0002>
+	pigment { Yellow }
+	texture { NBoldglass }
+}
+
+union {
+	#declare lineAngle = 0;
+	
+	#while ( lineAngle <= 60 )
+	
+	    object { Line Rotate_Around_Trans( lineAngle*6*z, <7.5, 23.5, 0> ) }	    
+	    
+	    #declare lineAngle = lineAngle + 1;
+	#end	
 }
