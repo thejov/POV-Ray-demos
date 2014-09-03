@@ -5,8 +5,8 @@
 #include "transforms.inc"
 
 camera {
-	location <25, 30, -55>
-	look_at <15, 15, 0>
+	location <70, 30, -62>
+	look_at <25, 15, 0>
 }
 
 light_source { <0,30,-10> White }
@@ -29,61 +29,77 @@ plane {
     }
 }
 
-// window
-# declare Window = union {        
-    intersection {
-        sphere {
-            <7.5, 30, 0> 7.5
-            scale <1,2,1>
-            translate -33*y
+
+#declare ChurchWindow = union {
+
+    // window
+    # declare Window = union {        
+        intersection {
+            sphere {
+                <7.5, 30, 0> 7.5
+                scale <1,2,1>
+                translate -33*y
+            }
+            box { <0, 30, 0>, <30, 50, 0.00000015> }
         }
-        box { <0, 30, 0>, <30, 50, 0.00000015> }
+        
+        box { 0, <15, 30, 0.0001> }        
+                       
+        pigment { Blue }                   
+        texture { NBoldglass }
     }
     
-    box { 0, <15, 30, 0.0001> }        
-                   
-    pigment { Blue }                   
-    texture { NBoldglass }
-}
-
-object { Window  }
-
-// cross
-union {    
-    box { <6, 5, 0>, <9, 30, -0.0002> }
-    box { <2, 22, 0>, <13, 25, -0.0002> }    
-    translate -0.0015*z
-    pigment { Brown }
-    texture { NBoldglass }
-}
-
-// light circle behind cross
-intersection {
-    sphere { <7.5, 23.5, 0> 7.5 }
-    box { <0, 15, 0>, <30, 50, 0.00015> }
-    pigment { Yellow }
-    texture { NBoldglass }
-    translate -0.001*z
-}
-
-// shine lines
-#declare Line = box {
-	<7.5, 23.5, 0>, <8, 50, -0.00002>
-	pigment { Yellow }
-	texture { NBoldglass }
-}
-
-intersection {
-    object { Window translate -0.00002*z}
+    object { Window  }
     
-    union {
-    	#declare lineAngle = 0;
-    	
-    	#while ( lineAngle <= 60 )
-    	
-    	    object { Line Rotate_Around_Trans( lineAngle*6*z, <7.5, 23.5, 0> ) }	    
-    	    
-    	    #declare lineAngle = lineAngle + 1;
-    	#end	
+    // cross
+    union {    
+        box { <6, 5, 0>, <9, 30, -0.0002> }
+        box { <2, 22, 0>, <13, 25, -0.0002> }    
+        translate -0.0015*z
+        pigment { Brown }
+        texture { NBoldglass }
+    }
+    
+    // light circle behind cross
+    intersection {
+        sphere { <7.5, 23.5, 0> 7.5 }
+        box { <0, 15, 0>, <30, 50, 0.00015> }
+        pigment { Yellow }
+        texture { NBoldglass }
+        translate -0.001*z
+    }
+    
+    // shine lines
+    #declare Line = box {
+    	<7.5, 23.5, 0>, <8, 50, -0.00002>
+    	pigment { Yellow }
+    	texture { NBoldglass }
+    }
+    
+    intersection {
+        object { Window translate -0.00002*z}
+        
+        union {
+        	#declare lineAngle = 0;
+        	
+        	#while ( lineAngle <= 60 )
+        	
+        	    object { Line Rotate_Around_Trans( lineAngle*6*z, <7.5, 23.5, 0> ) }	    
+        	    
+        	    #declare lineAngle = lineAngle + 1;
+        	#end	
+        }
     }
 }
+
+#declare i = 0;
+
+#while ( i <= 5 )
+    
+    object { ChurchWindow translate i*25*x }
+    
+    #declare i = i + 1;
+    
+#end
+
+object { ChurchWindow }
