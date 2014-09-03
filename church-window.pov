@@ -30,9 +30,7 @@ plane {
 }
 
 // window
-union {    
-    
-    // window background
+# declare Window = union {        
     intersection {
         sphere {
             <7.5, 30, 0> 7.5
@@ -42,11 +40,13 @@ union {
         box { <0, 30, 0>, <30, 50, 0.00000015> }
     }
     
-    box { 0, <15, 30, 0> }        
-    
-    pigment { Blue }
+    box { 0, <15, 30, 0.0001> }        
+                   
+    pigment { Blue }                   
     texture { NBoldglass }
 }
+
+object { Window  }
 
 // cross
 union {    
@@ -68,18 +68,22 @@ intersection {
 
 // shine lines
 #declare Line = box {
-	<7.5, 23.5, 0>, <8, 40, -0.0002>
+	<7.5, 23.5, 0>, <8, 50, -0.00002>
 	pigment { Yellow }
 	texture { NBoldglass }
 }
 
-union {
-	#declare lineAngle = 0;
-	
-	#while ( lineAngle <= 60 )
-	
-	    object { Line Rotate_Around_Trans( lineAngle*6*z, <7.5, 23.5, 0> ) }	    
-	    
-	    #declare lineAngle = lineAngle + 1;
-	#end	
+intersection {
+    object { Window translate -0.00002*z}
+    
+    union {
+    	#declare lineAngle = 0;
+    	
+    	#while ( lineAngle <= 60 )
+    	
+    	    object { Line Rotate_Around_Trans( lineAngle*6*z, <7.5, 23.5, 0> ) }	    
+    	    
+    	    #declare lineAngle = lineAngle + 1;
+    	#end	
+    }
 }
