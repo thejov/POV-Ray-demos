@@ -1,3 +1,6 @@
+// The Cerro Ancon hill in Panama City
+// http://imgur.com/yi0g8zq
+
 #include "colors.inc"
 #include "textures.inc"
 #include "transforms.inc"
@@ -13,12 +16,12 @@ light_source { <20,60,-30> Grey }
 plane {
     y, 0
     texture {        
-        pigment { color Green }
+        pigment { color DarkGreen }
         normal { granite 3 scale 4}
     }
 }
 
-// sky and ground fog are a modified version of the following example:
+// sky and ground fog are a slightly modified version of the following example:
 // http://www.f-lohmueller.de/pov_tut/backgrnd/p_sky1.htm
 
 // sky
@@ -27,7 +30,7 @@ plane {
 	
       texture {
       	pigment {
-      		color rgb<0.1,0.3,0.75>*0.7
+      		color rgb <0.1,0.3,0.75>*0.7
       	}
       	
       	#if (version = 3.7 )  finish { emission 1 diffuse 0 }
@@ -69,56 +72,87 @@ fog {
 
 #declare Hill = cone {
 	<15,-10,0>, 50, <10,30,0>, 5
-	pigment { color Green }
+	pigment { color DarkGreen }
 	finish { specular 0.7 roughness 0.03 }
-      normal { granite 3 scale 4}
+    normal { granite 5 scale 4 }
 }
 
 #declare FlagInner = polygon {
 	5, <0, 0>, <0, 1>, <1, 1>, <1, 0>, <0, 0>
-	pigment { White }
-	normal {
-		gradient x
-		phase clock
-		scale <0.2, 1, 1>
-		sine_wave
-	}
+	pigment { White }	
 	
 	scale <3, 2, 1>
-	translate <-1.5, 0, 0>
+	translate <-1.5, 0, 0>							
 }
 
-// the flag is a modified verion of the following example:
-// http://www.povray.org/documentation/view/3.7.0/111/
-#declare Flag = union {
-	object { FlagInner }
-	object { FlagInner scale 0.5 translate -0.00001 pigment { Red } }
+#declare SmallFlagInner = object { FlagInner
+    scale 0.5
+    translate <-0.7, 0, -0.00001>
+    normal {
+		gradient x
+		phase clock
+		scale <1.5, 1, 50>
+		sine_wave
+	}            
+}
+
+#declare PanamaFlag = union {
+    object { FlagInner }
+	object { SmallFlagInner pigment { Blue } }
+	object { SmallFlagInner translate <1.5, 1, 0> pigment { Red } }
 	
-	// flagpole
-	cylinder {
-		<-1.5, -4, 0>, <-1.5, 2.25, 0>, 0.05
-		texture { Silver_Metal }
-	}
+	object { SmallFlagInner
+	    pigment {
+            Star_Ptrn(0.25,5,2)
+            color_map { [ 0, White ] [ 1, Blue ] }
+            translate <0.7, 0.5, 0>
+        }
+        translate 1*y
+    }
+    
+    object { SmallFlagInner
+	    pigment {
+            Star_Ptrn(0.25,5,2)
+            color_map { [ 0, White ] [ 1, Red ] }
+            translate <0.7, 0.5, 0>
+        }
+        translate 1.5*x
+    }
+}
+
+#declare FlagPole = union {
+    // flagpole
+	cylinder { <-1.5, -4, 0>, <-1.5, 2, 0>, 0.08 }
 	
 	// polecap
-	sphere {
-		<-1.5, 2.25, 0>, 0.1
-		texture { Silver_Metal }
-	}
+	sphere { <-1.5, 2, 0>, 0.14	}
 	
-	translate <0,12,-5>
+    pigment { Gray20 }	
+}
+
+#declare FlagWithPole = union {
+	object { PanamaFlag
+	    scale 0.8
+	    translate <-0.3, 0.3>	    
+	}		
+	
+	object { FlagPole }
+	
+	translate <1.5,14,0>
 	scale 3
 }
 
 union {
 	object { Hill scale 1.5 } // the cerra ancon hill
-	object { Flag }
+	object { FlagWithPole }
 	translate 20*z
 }
+
+light_source { <0,60,-30> White spotlight point_at <-10,1,0> }
 
 // other hill in front
 object { Hill
 	translate <-30, 0, -50>
-	pigment { DarkGreen }
+	pigment { Gray15 }
 	scale <1.5,0,0>
 }
