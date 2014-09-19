@@ -156,3 +156,73 @@ object { Hill
 	pigment { Gray15 }
 	scale <1.5,0,0>
 }
+
+// BaseStation constructed using the pylon example at:
+// http://www.f-lohmueller.de/pov_tut/x_sam/tec_700e.htm
+
+//--------------------- Dimensions -------
+#declare R1 = 0.050; // main radius
+#declare R2 = 0.050; // diagonals radius
+#declare W = 1.00-R1; // half width(outline!)
+#declare H = 2.00; // height
+
+//--------------------- horizontal frame
+#macro Square_Q(R1_, W_ )
+	union {
+		 cylinder { <-W_,0,0>,<W_,0,0>,R1_ translate<0,0,-W_> }
+		 sphere { <0,0,0>,R1_ translate <W,0,-W_> }
+	}
+#end
+
+#macro Square (R10, W0)
+	union {
+		 object { Square_Q(R10, W0) rotate<0,0*90,0> }
+		 object { Square_Q(R10, W0) rotate<0,1*90,0> }
+		 object { Square_Q(R10, W0) rotate<0,2*90,0> }
+		 object { Square_Q(R10, W0) rotate<0,3*90,0> }
+     }
+#end
+     
+//-------------------- vertical elements:
+#macro V_Element (R10, R20, W0, H0)
+	union {
+		 cylinder { <0,0,0>,<0,H0,0>,R10 translate<-W0,0,-W0> }
+		 // diagonal:
+		 cylinder { <-W0,0,0>,<W0,H0,0>,R20 translate<0,0,-W0+R20> }
+		 cylinder { <W0,0,0>,<-W0,H0,0>,R20 translate<0,0,-W0-R20> }
+	   }
+#end
+
+#macro Element_4 (R11, R21, W1, H1)
+	union {
+		object { Square (R11, W1) }
+		 //vertical:
+		object { V_Element(R11,R21,W1,H1) rotate <0,0*90,0> }
+		object { V_Element(R11,R21,W1,H1) rotate <0,1*90,0> }
+		object { V_Element(R11,R21,W1,H1) rotate <0,2*90,0> }
+		object { V_Element(R11,R21,W1,H1) rotate <0,3*90,0> }
+		translate <0,R1,0>
+	}
+#end
+
+// Tower
+#declare Nr = 10;
+#declare EndNr = 20;
+
+#declare BaseStation = union {
+	#while (Nr < EndNr)
+		object {
+			Element_4 (R1, R2, W, H)
+			translate <-10,Nr*H,15>
+		}
+ 		#declare Nr = Nr + 1;
+	#end
+
+	object {
+		Square (R1, W)
+		translate <-10,Nr*H+R1,15>
+	}
+	translate <0,0.05,0>
+}
+
+object { BaseStation }
