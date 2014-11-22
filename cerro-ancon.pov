@@ -186,11 +186,11 @@ object { Hill
     // diagonal
     cylinder {
         <-CylinderHalfWidth,0,0>, <CylinderHalfWidth,Height,0>, DiagonalsRadius
-        translate<0,0,-CylinderHalfWidth + DiagonalsRadius>
+        translate <0,0,-CylinderHalfWidth + DiagonalsRadius>
     }
     cylinder {
-        <CylinderHalfWidth,0,0>,<-CylinderHalfWidth,Height,0>,DiagonalsRadius
-        translate<0,0,-CylinderHalfWidth - DiagonalsRadius>
+        <CylinderHalfWidth,0,0>, <-CylinderHalfWidth,Height,0>, DiagonalsRadius
+        translate <0,0,-CylinderHalfWidth - DiagonalsRadius>
     }
 }
 
